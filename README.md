@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Users lists with React, HTML and CSS
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+An app visualising different users with full CRUD operations. It uses consistent backend service build on Mongo DB.
 
 ## Available Scripts
 
