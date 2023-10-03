@@ -4,9 +4,10 @@ import * as userServices from "../../services/user-services"
 import { UserActions } from "../../constants"
 
 import { UserEntry } from "./UserEntry"
-import { UserEditCreate } from "./UserEditCreate"
+import { UserCreate } from "./UserCreate"
 import { UserDetails } from "./UserDetails"
 import { UserDelete } from "./UserDelete"
+import { UserEdit } from "./UserEdit"
 
 
 
@@ -34,46 +35,14 @@ export const UserList = () => {
         setActions({user: null, actions: null})
     }
 
-    const userCreateHandler = (event) => {
-        event.preventDefault()
-        const formData = new FormData(event.target)
-        const userData = Object.fromEntries(formData)
-        const userBody = {
-            firstName: userData.firstName, 
-            lastName: userData.lastName, 
-            email: userData.email, 
-            imageUrl: userData.imageUrl, 
-            phoneNumber: userData.phoneNumber,
-            address: {
-                streetNumber: userData.streetNumber,
-                street: userData.street,
-                city: userData.city,
-                country: userData.country
-            }
-        }
-        userServices.CreateUser(userBody)
+    const userCreateHandler = (data) => {
+        userServices.CreateUser(data)
             .then(newUser => setUsers(oldUsers => [...oldUsers, newUser.user]))
         closeHandler()
     }
 
-    const userEditHandler = (event) => {
-        event.preventDefault()
-        const formData = new FormData(event.target)
-        const userData = Object.fromEntries(formData)
-        const userBody = {
-            firstName: userData.firstName, 
-            lastName: userData.lastName, 
-            email: userData.email, 
-            imageUrl: userData.imageUrl, 
-            phoneNumber: userData.phoneNumber,
-            address: {
-                streetNumber: userData.streetNumber,
-                street: userData.street,
-                city: userData.city,
-                country: userData.country
-            }
-        }
-        userServices.EditUser(userBody, actions.user._id)
+    const userEditHandler = (data) => {
+        userServices.EditUser(data, actions.user._id)
             .then(modifiedUser => setUsers(oldUsers => oldUsers.map(oldUser => oldUser._id === modifiedUser.user._id ? modifiedUser.user : oldUser)))
         closeHandler()
     }
@@ -149,8 +118,8 @@ export const UserList = () => {
                 </table>
             </div>
             <button className="btn-add btn" onClick={() => clickHandler(null, UserActions.add)}>Add new user</button>
-            {actions.actions === 'add' && <UserEditCreate closeHandler={closeHandler} handler = {userCreateHandler} user={null}/>}
-            {actions.actions === 'edit' && <UserEditCreate closeHandler={closeHandler} handler = {userEditHandler} user={actions.user}/>}
+            {actions.actions === 'add' && <UserCreate closeHandler={closeHandler} UserCreateHandler = {userCreateHandler}/>}
+            {actions.actions === 'edit' && <UserEdit closeHandler={closeHandler} userEditHandler = {userEditHandler} user={actions.user}/>}
             {actions.actions === 'details' && <UserDetails closeHandler={closeHandler} user={actions.user}/>}
             {actions.actions === 'delete' && <UserDelete closeHandler={closeHandler} deleteHandler = {userDeleteHandler} user={actions.user} />}
         </>
