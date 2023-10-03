@@ -1,19 +1,3 @@
-
-
-// export const UserEditCreate = ({ closeHandler, handler, user }) => {
-//     const [values, setValues] = useState({
-//         firstName: user !== null ? user.firstName: '',
-//         lastName: user !== null ? user.lastName: '',
-//         email: user !== null ? user.email: '',
-//         phoneNumber: user !== null ? user.phoneNumber: '',
-//         imageUrl: user !== null ? user.imageUrl: '',
-//         country: user !== null ? user.address.country: '',
-//         city: user !== null ? user.address.city: '',
-//         street: user !== null ? user.address.street: '',
-//         streetNumber: user !== null ? user.address.streetNumber: ''
-//     })
-
-
 import { useState } from "react"
 
 export const UserEdit = ({closeHandler, userEditHandler, user}) => {

@@ -1,6 +1,7 @@
 import { useState } from "react"
+import { validator } from "../../utils/validator"
 
-export const UserCreate = ({closeHandler, UserCreateHandler}) => {
+export const UserCreate = ({ closeHandler, UserCreateHandler }) => {
     const [values, setValues] = useState({
         firstName: '',
         lastName: '',
@@ -13,6 +14,25 @@ export const UserCreate = ({closeHandler, UserCreateHandler}) => {
         streetNumber: ''
     })
 
+    const [errors, setErrors] = useState({
+        firstName: false,
+        lastName: false,
+        email: false,
+        phoneNumbe: false,
+        imageUrl: false,
+        country: false,
+        city: false,
+        street: false,
+        streetNumber: false
+    })
+
+    const validateHandler = (e) => {
+        setErrors(oldErrors => ({
+            ...oldErrors,
+            [e.target.name]: validator(e.target.name, e.target.value)
+        }))
+    }
+
     const changeHandler = (e) => {
         setValues(state => ({
             ...state,
@@ -22,9 +42,10 @@ export const UserCreate = ({closeHandler, UserCreateHandler}) => {
 
     const onSubmitHandler = (e) => {
         e.preventDefault()
+
+        const { country, city, street, streetNumber, ...userData } = values
+        userData.address = { country, city, street, streetNumber }
         
-        const {country, city, street, streetNumber, ...userData} = values
-        userData.address = {country, city, street, streetNumber}
         UserCreateHandler(userData)
     }
 
@@ -50,21 +71,25 @@ export const UserCreate = ({closeHandler, UserCreateHandler}) => {
                                 <label htmlFor="firstName">First name</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-user"></i></span>
-                                    <input id="firstName" name="firstName" type="text" onChange={changeHandler} value={values.firstName}/>
+                                    <input id="firstName" name="firstName" type="text" onChange={changeHandler} value={values.firstName} onBlur={validateHandler} />
                                 </div>
-                                <p className="form-error">
-                                    First name should be at least 3 characters long!
-                                </p>
+                                {errors.firstName &&
+                                    <p className="form-error">
+                                        First name should be at least 3 characters long!
+                                    </p>
+                                }
                             </div>
                             <div className="form-group">
                                 <label htmlFor="lastName">Last name</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-user"></i></span>
-                                    <input id="lastName" name="lastName" type="text"  onChange={changeHandler} value={values.lastName}/>
+                                    <input id="lastName" name="lastName" type="text" onChange={changeHandler} value={values.lastName} onBlur={validateHandler} />
                                 </div>
-                                <p className="form-error">
-                                    Last name should be at least 3 characters long!
-                                </p>
+                                {errors.lastName &&
+                                    <p className="form-error">
+                                        Last name should be at least 3 characters long!
+                                    </p>
+                                }
                             </div>
                         </div>
 
@@ -73,17 +98,21 @@ export const UserCreate = ({closeHandler, UserCreateHandler}) => {
                                 <label htmlFor="email">Email</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-envelope"></i></span>
-                                    <input id="email" name="email" type="text"  onChange={changeHandler} value={values.email}/>
+                                    <input id="email" name="email" type="text" onChange={changeHandler} value={values.email} onBlur={validateHandler} />
                                 </div>
-                                <p className="form-error">Email is not valid!</p>
+                                {errors.email &&
+                                    <p className="form-error">Email is not valid!</p>
+                                }
                             </div>
                             <div className="form-group">
                                 <label htmlFor="phoneNumber">Phone number</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-phone"></i></span>
-                                    <input id="phoneNumber" name="phoneNumber" type="text" onChange={changeHandler} value={values.phoneNumber}/>
+                                    <input id="phoneNumber" name="phoneNumber" type="text" onChange={changeHandler} value={values.phoneNumber} onBlur={validateHandler} />
                                 </div>
-                                <p className="form-error">Phone number is not valid!</p>
+                                {errors.phoneNumbe &&
+                                    <p className="form-error">Phone number is not valid!</p>
+                                }
                             </div>
                         </div>
 
@@ -91,9 +120,12 @@ export const UserCreate = ({closeHandler, UserCreateHandler}) => {
                             <label htmlFor="imageUrl">Image Url</label>
                             <div className="input-wrapper">
                                 <span><i className="fa-solid fa-image"></i></span>
-                                <input id="imageUrl" name="imageUrl" type="text"  onChange={changeHandler} value={values.imageUrl}/>
+                                <input id="imageUrl" name="imageUrl" type="text" onChange={changeHandler} value={values.imageUrl} onBlur={validateHandler} />
                             </div>
-                            <p className="form-error">ImageUrl is not valid!</p>
+                            {errors.imageUrl &&
+                                <p className="form-error">ImageUrl is not valid!</p>
+                            }
+
                         </div>
 
                         <div className="form-row">
@@ -101,21 +133,27 @@ export const UserCreate = ({closeHandler, UserCreateHandler}) => {
                                 <label htmlFor="country">Country</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-map"></i></span>
-                                    <input id="country" name="country" type="text"  onChange={changeHandler} value={values.country}/>
+                                    <input id="country" name="country" type="text" onChange={changeHandler} value={values.country} onBlur={validateHandler} />
                                 </div>
-                                <p className="form-error">
-                                    Country should be at least 2 characters long!
-                                </p>
+                                {errors.country &&
+                                    <p className="form-error">
+                                        Country should be at least 3 characters long!
+                                    </p>
+                                }
+
                             </div>
                             <div className="form-group">
                                 <label htmlFor="city">City</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-city"></i></span>
-                                    <input id="city" name="city" type="text" onChange={changeHandler} value={values.city}/>
+                                    <input id="city" name="city" type="text" onChange={changeHandler} value={values.city} onBlur={validateHandler} />
                                 </div>
-                                <p className="form-error">
-                                    City should be at least 3 characters long!
-                                </p>
+                                {errors.city &&
+                                    <p className="form-error">
+                                        City should be at least 3 characters long!
+                                    </p>
+                                }
+
                             </div>
                         </div>
 
@@ -124,21 +162,27 @@ export const UserCreate = ({closeHandler, UserCreateHandler}) => {
                                 <label htmlFor="street">Street</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-map"></i></span>
-                                    <input id="street" name="street" type="text" onChange={changeHandler} value={values.street}/>
+                                    <input id="street" name="street" type="text" onChange={changeHandler} value={values.street} onBlur={validateHandler} />
                                 </div>
-                                <p className="form-error">
-                                    Street should be at least 3 characters long!
-                                </p>
+                                {errors.street &&
+                                    <p className="form-error">
+                                        Street should be at least 3 characters long!
+                                    </p>
+                                }
+
                             </div>
                             <div className="form-group">
                                 <label htmlFor="streetNumber">Street number</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-house-chimney"></i></span>
-                                    <input id="streetNumber" name="streetNumber" type="text" onChange={changeHandler} value={values.streetNumber}/>
+                                    <input id="streetNumber" name="streetNumber" type="text" onChange={changeHandler} value={values.streetNumber} onBlur={validateHandler} />
                                 </div>
-                                <p className="form-error">
+                                {errors.streetNumber &&
+                                    <p className="form-error">
                                     Street number should be a positive number!
                                 </p>
+                                }
+                                
                             </div>
                         </div>
                         <div id="form-actions">
